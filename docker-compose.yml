@@ -1,0 +1,27 @@
+version: "3"
+services:
+
+    trackerdb:
+        image: mcr.microsoft.com/mssql/server:2019-latest
+        container_name: mssqlserver
+        environment:
+            SA_PASSWORD: "Password0!"
+            ACCEPT_EULA: "Y"
+        restart: always
+        ports:
+            - "1433:1433"
+
+    tracker.api:
+      image: taskstrackerapi
+      container_name: tracker.api
+      depends_on:
+          - trackerdb
+      ports:
+          - "8000:6000"
+      build:
+        context: .
+        dockerfile: Dockerfile
+
+volumes:
+    tracker.api:
+    database:
