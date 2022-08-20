@@ -5,7 +5,6 @@ using TasksTracker.Storage;
 
 namespace TasksTracker.Tasks.GettingTask;
 
-
 public record GetTaskQuery {
     public Guid TaskId { get; }
 
@@ -16,7 +15,7 @@ public record GetTaskQuery {
     Create(Guid? id) => new(taskId: id.VerifyNotEmpty(nameof(id)));
 }
 
-internal sealed class 
+internal sealed class
 GetTaskQueryHandler : IQueryHandler<GetTaskQuery, TaskItem?> {
     private readonly IQueryable<TrackerTask> _tasks;
 

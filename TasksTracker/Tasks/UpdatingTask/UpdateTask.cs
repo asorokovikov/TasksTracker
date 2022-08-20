@@ -31,7 +31,7 @@ public record UpdateTaskCommand {
     );
 }
 
-internal sealed class 
+internal sealed class
 UpdateTaskCommandHandler : ICommandHandler<UpdateTaskCommand> {
     private readonly TrackerDbContext _dataContext;
 

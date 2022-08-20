@@ -23,22 +23,22 @@ public record GetAttachmentsListQuery {
     );
 }
 
-internal sealed class 
+internal sealed class
 GetAttachmentsListQueryHandler : IQueryHandler<GetAttachmentsListQuery, IReadOnlyList<AttachmentItem>> {
     private readonly IQueryable<Attachment> _attachments;
 
-    public GetAttachmentsListQueryHandler(IQueryable<Attachment> attachments) => 
+    public GetAttachmentsListQueryHandler(IQueryable<Attachment> attachments) =>
         _attachments = attachments;
 
-    public async ValueTask<IReadOnlyList<AttachmentItem>> 
-    Handle(GetAttachmentsListQuery query, CancellationToken ct = default) => await _attachments            
+    public async ValueTask<IReadOnlyList<AttachmentItem>>
+    Handle(GetAttachmentsListQuery query, CancellationToken ct = default) => await _attachments
         .Where(x => x.TaskId == query.TaskId)
         .Select(x => x.ToAttachmentItem())
         .ToListAsync(ct);
 }
 
 internal static class AttachmentHelper {
-    public static AttachmentItem 
+    public static AttachmentItem
     ToAttachmentItem(this Attachment attachment) => new (
         Id: attachment.Id,
         Filename: attachment.Filename,

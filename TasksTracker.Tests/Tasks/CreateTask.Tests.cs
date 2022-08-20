@@ -2,8 +2,7 @@ using TasksTracker.Tasks.CreatingTask;
 
 namespace TasksTracker.Tests.Tasks;
 
-public sealed class 
-CreateTaskTests : IClassFixture<TrackerWebApplicationFactory> {
+public sealed class CreateTaskTests : IClassFixture<TrackerWebApplicationFactory> {
     private readonly HttpClient _client;
 
     public CreateTaskTests(TrackerWebApplicationFactory factory) =>

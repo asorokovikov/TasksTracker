@@ -1,7 +1,7 @@
-﻿namespace TasksTracker.Common; 
+﻿namespace TasksTracker.Common;
 
 public static class Directories {
-    
+
     public static bool
     DirectoryExists(this string directory) => Directory.Exists(directory);
 

@@ -3,7 +3,7 @@ using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace TasksTracker.Common; 
+namespace TasksTracker.Common;
 
 public static class Json {
 
@@ -40,7 +40,7 @@ public static class Json {
         if (!jObject.TryGetValue(property, StringComparison.Ordinal, out var jToken))
             return false;
 
-        if (jToken.Type == JTokenType.String)
+        if (jToken.Type == JTokenType.String) {
             if (typeof(T) == typeof(string)) {
                 result = jToken.ToObject<T>();
                 return result != null;
@@ -49,6 +49,7 @@ public static class Json {
                 result = JsonConvert.DeserializeObject<T>(jToken.ToObject<string>() ?? string.Empty);
                 return result != null;
             }
+        }
 
         result = jToken.ToObject<T>();
         return result != null;

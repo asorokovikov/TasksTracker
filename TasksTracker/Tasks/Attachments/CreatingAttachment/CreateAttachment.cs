@@ -30,7 +30,7 @@ internal sealed class CreateAttachmentCommandHandler : ICommandHandler<CreateAtt
     private readonly IAttachmentClientFactory _factory;
 
     public CreateAttachmentCommandHandler(
-        Func<Attachment, CancellationToken, ValueTask> addAttachment, 
+        Func<Attachment, CancellationToken, ValueTask> addAttachment,
         IAttachmentClientFactory factory
     ) {
         _addAttachment = addAttachment;
@@ -45,7 +45,7 @@ internal sealed class CreateAttachmentCommandHandler : ICommandHandler<CreateAtt
 }
 
 internal static class CommandHandlerHelper {
-    public static Attachment 
+    public static Attachment
     ToAttachment(this CreateAttachmentCommand command) => new (
         id: command.FileId,
         taskId: command.TaskId,

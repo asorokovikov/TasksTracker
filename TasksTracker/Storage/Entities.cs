@@ -52,7 +52,7 @@ internal sealed class Attachment {
 }
 
 internal static class EntitiesHelper {
-    public static TaskItem 
+    public static TaskItem
     ToTaskItem(this TrackerTask model) => new(
         TaskId: model.TaskId,
         Name: model.Name,
@@ -60,9 +60,9 @@ internal static class EntitiesHelper {
         CreatedAt: model.CreatedAt
     );
 
-    public static IEnumerable<TrackerTask> 
+    public static IEnumerable<TrackerTask>
     GetTasksSeedingData(int count = 100) {
-        for (var index = 0; index < count; index++)
+        for (var index = 0; index < count; index++) {
             yield return new(
                 taskId: Guid.NewGuid(),
                 name: $"Task #{index + 1}",
@@ -70,5 +70,6 @@ internal static class EntitiesHelper {
                 createdAt: DateTime.Now,
                 attachments: new()
             );
+        }
     }
 }

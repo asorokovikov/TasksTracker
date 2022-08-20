@@ -17,7 +17,7 @@ internal static class Route {
                 var result = await context.SendQuery<GetAttachmentQuery, FileItem>(query);
                 return File(result.Stream, "application/octet-stream", result.Filename);
             });
-        
+
         return endpoints;
     }
 }

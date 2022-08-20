@@ -14,11 +14,9 @@ var app = builder.Build();
     app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseRouting();
     app.UseEndpoints(endpoints => endpoints.UseTasksTrackerEndpoints());
-    if (app.Environment.IsDevelopment()) {
-        app.ApplyPendingMigrations();
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.ApplyPendingMigrations();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.Run();

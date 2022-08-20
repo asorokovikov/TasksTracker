@@ -22,19 +22,19 @@ public record GetTasksListQuery {
 
     public static GetTasksListQuery
     Create(int? page, int? pageSize, string? filter) => new (
-        page: (page ?? DefaultPage).VerifyGreaterZero(nameof(page)), 
-        pageSize: (pageSize ?? DefaultPageSize).VerifyGreaterZero(nameof(pageSize)), 
+        page: (page ?? DefaultPage).VerifyGreaterZero(nameof(page)),
+        pageSize: (pageSize ?? DefaultPageSize).VerifyGreaterZero(nameof(pageSize)),
         filter: filter
     );
 }
 
-internal sealed class 
+internal sealed class
 GetTasksListQueryHandler : IQueryHandler<GetTasksListQuery, IReadOnlyList<TaskItem>> {
     private readonly IQueryable<TrackerTask> _tasks;
 
     public GetTasksListQueryHandler(IQueryable<TrackerTask> tasks) => _tasks = tasks;
 
-    public async ValueTask<IReadOnlyList<TaskItem>> 
+    public async ValueTask<IReadOnlyList<TaskItem>>
     Handle(GetTasksListQuery query, CancellationToken ct = default) {
         var tasks = _tasks;
         if (query.Filter != null)

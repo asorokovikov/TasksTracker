@@ -16,9 +16,7 @@ public sealed class TrackerWebApplicationFactory : WebApplicationFactory<Program
     protected override void ConfigureWebHost(IWebHostBuilder builder) {
         builder.ConfigureServices(services => {
             var config = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-            services.Configure<AttachmentConfiguration>(x => {
-                x.ContentRootDirectory += _databaseName;
-            });
+            services.Configure<AttachmentConfiguration>(x => x.ContentRootDirectory += _databaseName);
             
             var descriptor = services.SingleOrDefault(x => x.ServiceType == typeof(DbContextOptions<TrackerDbContext>));
             if (descriptor != null)

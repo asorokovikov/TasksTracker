@@ -2,8 +2,7 @@ using TasksTracker.Tasks.UpdatingTask;
 
 namespace TasksTracker.Tests.Tasks;
 
-public sealed class 
-UpdateTaskTests : IClassFixture<TrackerWebApplicationFactory> {
+public sealed class UpdateTaskTests : IClassFixture<TrackerWebApplicationFactory> {
     private readonly HttpClient _client;
 
     public UpdateTaskTests(TrackerWebApplicationFactory factory) =>
@@ -22,7 +21,7 @@ UpdateTaskTests : IClassFixture<TrackerWebApplicationFactory> {
         var taskItem = result.VerifyNotNull();
         taskItem.TaskId.Should().Be(taskId);
         taskItem.Name.Should().Be("123");
-        taskItem.State.Should().Be(state.ToString());
+        taskItem.State.Should().Be(state);
         taskItem.CreatedAt.Should().Be(createdAt);
     }
 

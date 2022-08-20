@@ -24,7 +24,7 @@ public record GetAttachmentQuery {
     );
 }
 
-internal sealed class 
+internal sealed class
 GetAttachmentQueryHandler : IQueryHandler<GetAttachmentQuery, FileItem> {
     private readonly IAttachmentClientFactory _factory;
     private readonly IQueryable<Attachment> _attachments;
@@ -43,7 +43,7 @@ GetAttachmentQueryHandler : IQueryHandler<GetAttachmentQuery, FileItem> {
         var client = _factory.CreateClient(query.TaskId);
         var stream = new MemoryStream();
         await client.DownloadToAsync(stream, query.FileId, ct);
-        stream.Seek(0, SeekOrigin.Begin); 
+        stream.Seek(0, SeekOrigin.Begin);
         return new (attachment.Filename, stream);
     }
 }

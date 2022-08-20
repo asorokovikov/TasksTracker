@@ -2,11 +2,10 @@
 
 namespace TasksTracker.Tests.Tasks;
 
-public sealed class 
-GetTaskTests : IClassFixture<TrackerWebApplicationFactory> {
+public sealed class GetTaskTests : IClassFixture<TrackerWebApplicationFactory> {
     private readonly HttpClient _client;
 
-    public GetTaskTests(TrackerWebApplicationFactory factory) => 
+    public GetTaskTests(TrackerWebApplicationFactory factory) =>
         _client = factory.CreateClient();
 
     [Fact]

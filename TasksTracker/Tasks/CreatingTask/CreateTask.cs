@@ -33,7 +33,7 @@ public record CreateTaskCommand {
 internal sealed class CreateTaskCommandHandler : ICommandHandler<CreateTaskCommand> {
     private readonly Func<TrackerTask, CancellationToken, ValueTask> _onAddTask;
 
-    public CreateTaskCommandHandler(Func<TrackerTask, CancellationToken, ValueTask> onAddTask) => 
+    public CreateTaskCommandHandler(Func<TrackerTask, CancellationToken, ValueTask> onAddTask) =>
         _onAddTask = onAddTask;
 
     public async ValueTask Handle(CreateTaskCommand command, CancellationToken ct = default) {

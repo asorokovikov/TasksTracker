@@ -12,13 +12,13 @@ internal static class Route {
         // GET api/tasks/{taskId}/attachments
         var route = endpoints.MapGet(
             pattern: "api/tasks/{taskId:guid}/attachments",
-            handler: async (HttpContext context, Guid taskId) => 
+            handler: async (HttpContext context, Guid taskId) =>
             {
                 var query = GetAttachmentsListQuery.Create(taskId: taskId);
                 var result = await context.SendQuery<GetAttachmentsListQuery, IReadOnlyList<AttachmentItem>>(query);
                 return Ok(result);
             });
-        
+
         return endpoints;
     }
 }

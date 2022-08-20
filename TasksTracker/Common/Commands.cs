@@ -39,15 +39,15 @@ public static class CommandHandlerHelper {
         return services.AddTransient<ICommandHandler<TCommand, TResult>, TCommandHandler>(configure);
     }
 
-    public static ICommandHandler<T> GetCommandHandler<T>(this IServiceProvider provider) => 
+    public static ICommandHandler<T> GetCommandHandler<T>(this IServiceProvider provider) =>
         provider.GetRequiredService<ICommandHandler<T>>();
 
-    public static ICommandHandler<TCommand, TResult> 
-    GetCommandHandler<TCommand, TResult>(this IServiceProvider provider) => 
+    public static ICommandHandler<TCommand, TResult>
+    GetCommandHandler<TCommand, TResult>(this IServiceProvider provider) =>
         provider.GetRequiredService<ICommandHandler<TCommand, TResult>>();
 
-    public static ValueTask 
-    SendCommand<T>(this HttpContext context, T command) => 
+    public static ValueTask
+    SendCommand<T>(this HttpContext context, T command) =>
         context.RequestServices.GetCommandHandler<T>().Handle(command, context.RequestAborted);
 
     public static ValueTask<TResult>

@@ -8,7 +8,7 @@ public static class Numbers {
 
     public static bool
     IsLessZero(this double value, float deviation = DefaultFloatDeviation) => value < -deviation;
-    
+
     public static bool
     IsZero(this long value) => value == 0;
-} 
+}

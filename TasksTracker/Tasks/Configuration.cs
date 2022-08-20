@@ -9,10 +9,10 @@ using TasksTracker.Tasks.GettingTasksList;
 using TasksTracker.Tasks.RemovingTask;
 using TasksTracker.Tasks.UpdatingTask;
 
-namespace TasksTracker.Tasks; 
+namespace TasksTracker.Tasks;
 
 internal static class Configuration {
-    
+
     public static IEndpointRouteBuilder
     UseTaskEndpoints(this IEndpointRouteBuilder endpoints) => endpoints
         .UseCreateTaskEndpoint()
@@ -20,12 +20,12 @@ internal static class Configuration {
         .UseUpdateTaskEndpoint()
         .UseGetTaskEndpoint()
         .UseGetTasksListEndpoint();
-    
+
     public static void AddTaskServices(this IServiceCollection services) {
         services.AddCommandHandlers();
         services.AddQueryHandlers();
     }
-    
+
     private static void AddCommandHandlers(this IServiceCollection services) {
         services.AddCommandHandler<RemoveTaskCommand, RemoveTaskCommandHandler>();
         services.AddCommandHandler<UpdateTaskCommand, UpdateTaskCommandHandler>();

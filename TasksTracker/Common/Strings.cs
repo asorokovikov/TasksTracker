@@ -10,15 +10,15 @@ public static class Strings {
         value.IsEmpty() ? string.Empty : value!.Trim('"');
 
     public static bool
-    IsEmpty(this string? @string) => string.IsNullOrWhiteSpace(@string);
-    
+    IsEmpty(this string? value) => string.IsNullOrWhiteSpace(value);
+
     public static bool
-    IsNotEmpty(this string? @string) => !string.IsNullOrWhiteSpace(@string);
+    IsNotEmpty(this string? value) => !string.IsNullOrWhiteSpace(value);
 
     public static string
-    Remove(this string @string, string substring) => @string.Replace(substring, "");
+    Remove(this string value, string substring) => value.Replace(substring, "");
 
     public static string
-    TakeAfter(this string @string, char delimiter = ' ') =>
-        @string.Substring(@string.LastIndexOf(delimiter) + 1);
+    TakeAfter(this string value, char delimiter = ' ') =>
+        value[(value.LastIndexOf(delimiter) + 1)..];
 }

@@ -37,12 +37,13 @@ public static class Verify {
             ThrowHelper.ThrowArgumentEmptyException(value, argumentName);
         return value;
     }
-    
+
     public static string
     VerifyLengthLessOrEqual(this string value, int length, string? argumentName = null) {
-        if (value.Length > length)
+        if (value.Length > length) {
             throw new ArgumentOutOfRangeException($"Expecting length of {argumentName.Quoted()} to be less or equal " +
                 $"that {length} but was {value.Length}");
+        }
         return value;
     }
 
@@ -87,7 +88,6 @@ public static class Verify {
 }
 
 internal static class ThrowHelper {
-
     [DoesNotReturn]
     internal static void ThrowArgumentGreaterOrEqualZeroException<T>(T value, string? argumentName = null) =>
         throw new ArgumentOutOfRangeException($"Expecting value {argumentName} to be greater or equal zero but was {value}");
