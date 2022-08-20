@@ -30,7 +30,8 @@ internal static class Route {
             await context.SendCommand(createTaskCommand);
             return Created($"/api/tasks/{taskId}", taskId);
         });
-
+        builder.Produces(StatusCodes.Status201Created);
+        builder.Produces(StatusCodes.Status400BadRequest);
         return endpoints;
     }
 }

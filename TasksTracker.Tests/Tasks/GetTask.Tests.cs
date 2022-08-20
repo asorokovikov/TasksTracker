@@ -31,7 +31,7 @@ public sealed class GetTaskTests : IClassFixture<TrackerWebApplicationFactory> {
     }
 
     [Fact]
-    public async Task CreateTask_GetTask_Test() {
+    public async Task ValidComplexWorkflow_ShouldReturn_200() {
         var request = new CreateTaskRequest(Name: "Task #1", State: "New");
         var response = await _client.PostAsync("/api/tasks", request.ToStringContent());
         response.StatusCode.Should().Be(HttpStatusCode.Created);
