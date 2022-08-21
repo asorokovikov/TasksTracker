@@ -1,5 +1,6 @@
 tests/TestData/**
 _Resharper.*/**
+TasksTracker.Api/Attachments/
 
 *.swp
 *.*~
@@ -37,4 +38,3 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
-

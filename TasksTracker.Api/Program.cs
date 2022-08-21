@@ -3,6 +3,9 @@ using TasksTracker.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    var fileSizeLimit = builder.Configuration.GetValue<long>("AttachmentConfiguration:FileSizeLimit");
+    builder.WebHost.ConfigureKestrel((_, options) => options.Limits.MaxRequestBodySize = fileSizeLimit);
+
     builder.Services.AddRouting();
     builder.Services.AddTasksTracker(builder.Configuration);
     builder.Services.AddEndpointsApiExplorer();

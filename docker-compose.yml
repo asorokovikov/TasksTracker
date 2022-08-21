@@ -24,3 +24,4 @@ services:
             -   trackerdb
 volumes:
     tracker-volume:
+        name: tracker

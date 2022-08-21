@@ -6,7 +6,8 @@ using TasksTracker.Common;
 namespace TasksTracker.Storage;
 
 internal sealed class AttachmentConfiguration {
-    public string ContentRootDirectory { get; set; } = "Attachments";
+    public string ContentRootDirectory { get; set; } = default!;
+    public long FileSizeLimit { get; set; }
 }
 
 public interface IAttachmentClient {
@@ -21,33 +22,44 @@ public interface IAttachmentClientFactory {
 
 internal sealed class LocalAttachmentClientFactory : IAttachmentClientFactory {
     private readonly ILoggerFactory _loggerFactory;
-    private readonly string _contentRootDirectory;
+    private readonly AttachmentConfiguration Configuration;
+    
+    private string ContentRootDirectory => Configuration.ContentRootDirectory;
 
     public LocalAttachmentClientFactory(
         IOptions<AttachmentConfiguration> configuration,
         ILoggerFactory loggerFactory
     ) {
         _loggerFactory = loggerFactory;
-        _contentRootDirectory = configuration.Value.ContentRootDirectory;
+        Configuration = configuration.Value;
     }
 
     public IAttachmentClient CreateClient(Guid taskId) {
-        var directory = _contentRootDirectory.AppendPath(taskId.ToString());
+        var directory = ContentRootDirectory.AppendPath(taskId.ToString());
         var logger = _loggerFactory.CreateLogger<LocalAttachmentClient>();
-        return new LocalAttachmentClient(directory, logger);
+        return new LocalAttachmentClient(directory, Configuration.FileSizeLimit, logger);
     }
 }
 
 public sealed class LocalAttachmentClient : IAttachmentClient {
     private readonly string _rootDirectory;
+    private readonly long _fileSizeLimit;
     private readonly ILogger _logger;
 
-    public LocalAttachmentClient(string rootDirectory, ILogger<LocalAttachmentClient> logger) {
+    public LocalAttachmentClient(
+        string rootDirectory, 
+        long fileSizeLimit, 
+        ILogger<LocalAttachmentClient> logger
+    ) {
         _rootDirectory = rootDirectory.CreateDirectoryIfNotExists();
+        _fileSizeLimit = fileSizeLimit;
         _logger = logger;
     }
 
     public async Task UploadAsync(Guid fileId, IFormFile formFile, CancellationToken ct = default) {
+        if (formFile.Length > _fileSizeLimit)
+            throw new ArgumentException($"The file is too large. " +
+                $"Expecting length of the file to be less than {_fileSizeLimit.FromBytes().Humanize()}");
         var file = GetFile(fileId);
         await using var stream = file.OpenFileForWrite();
         await formFile.CopyToAsync(stream, ct);
