@@ -4,7 +4,7 @@ namespace TasksTracker.Common;
 
 public static class Verify {
     public static T
-    VerifyNotNull<T>(this T? value)  {
+    VerifyNotNull<T>([NotNull] this T? value)  {
         if (value == null)
             throw new ArgumentNullException($"Expected object of type {typeof(T).Name} is not null");
         return value;

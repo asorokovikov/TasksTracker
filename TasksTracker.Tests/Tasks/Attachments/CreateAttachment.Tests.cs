@@ -29,7 +29,6 @@ public sealed class CreateAttachmentTests : IClassFixture<TrackerWebApplicationF
         var taskId = allTasks![0].TaskId;
 
         var response = await _client.PostAsync($"/api/tasks/{taskId}/attachments", formData);
-
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
@@ -64,7 +63,7 @@ public sealed class CreateAttachmentTests : IClassFixture<TrackerWebApplicationF
 
         var attachments = await response.Content.ReadFromJsonAsync<IReadOnlyList<AttachmentItem>>();
         attachments.ShouldNotBeNull();
-        var attachmentItem = attachments.FirstOrDefault();
+        var attachmentItem = attachments.FirstOrDefault(x => x.Id.ToString() == fileId);
         attachmentItem.ShouldNotBeNull().Should().BeEquivalentTo(
             new AttachmentItem(Guid.Parse(fileId), filename, payload.LongLength)
         );
