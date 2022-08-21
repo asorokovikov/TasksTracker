@@ -1,13 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System.Net;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 
 namespace TasksTracker.Api.Middleware;
+
+public sealed class ErrorDetails {
+    public HttpStatusCode StatusCode { get; }
+    public string Message { get; }
+
+    [JsonIgnore]
+    public int StatusCodeNumber => (int)StatusCode;
+
+    public ErrorDetails(HttpStatusCode statusCode, string message) {
+        StatusCode = statusCode;
+        Message = message;
+    }
+
+    public override string ToString() => JsonConvert.SerializeObject(this);
+}
 
 public sealed class ErrorHandlingMiddleware {
     private readonly RequestDelegate _next;
 
-    public ErrorHandlingMiddleware(RequestDelegate next) => 
+    public ErrorHandlingMiddleware(RequestDelegate next) =>
         _next = next;
 
     public async Task Invoke(HttpContext context) {
@@ -20,15 +35,20 @@ public sealed class ErrorHandlingMiddleware {
     }
 
     public static Task HandleExceptionAsync(HttpContext context, Exception exception) {
-        var result = JsonConvert.SerializeObject(new { error = exception.Message });
+        var errorDetails = exception.ToErrorDetails();
         context.Response.ContentType = "application/json";
-        context.Response.StatusCode = (int)exception.ToHttpStatusCode();
-        return context.Response.WriteAsync(result);
+        context.Response.StatusCode = errorDetails.StatusCodeNumber;
+        return context.Response.WriteAsync(errorDetails.ToString());
     }
 }
 
 internal static class ErrorHandlingHelper {
-    internal static HttpStatusCode ToHttpStatusCode(this Exception exception) => exception switch {
+    public static ErrorDetails ToErrorDetails(this Exception exception) => new (
+        statusCode: exception.ToHttpStatusCode(),
+        message: exception.Message
+    );
+
+    public static HttpStatusCode ToHttpStatusCode(this Exception exception) => exception switch {
         UnauthorizedAccessException _ => HttpStatusCode.Unauthorized,
         NotImplementedException _ => HttpStatusCode.NotImplemented,
         InvalidOperationException _ => HttpStatusCode.Conflict,

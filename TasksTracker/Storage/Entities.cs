@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TasksTracker.Common;
 using TasksTracker.Tasks;
 
 namespace TasksTracker.Storage;
@@ -52,12 +53,19 @@ internal sealed class Attachment {
 }
 
 internal static class EntitiesHelper {
-    public static TaskItem
-    ToTaskItem(this TrackerTask model) => new(
+    public static TaskItem ToTaskItem(this TrackerTask model) => new(
         TaskId: model.TaskId,
         Name: model.Name,
         State: model.State.ToString(),
         CreatedAt: model.CreatedAt
+    );
+    
+    public static TrackerTask ToTrackerTask(this TaskItem item, List<Attachment> attachments) => new (
+        taskId: item.TaskId,
+        name: item.Name,
+        state: item.State.VerifyType<TaskState>(),
+        createdAt: item.CreatedAt,
+        attachments: attachments
     );
 
     public static IEnumerable<TrackerTask>

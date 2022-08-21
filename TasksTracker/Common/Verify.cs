@@ -20,7 +20,7 @@ public static class Verify {
     public static TEnum
     VerifyType<TEnum>(this string? value, string? argumentName = null) where TEnum : struct, Enum {
         if (!Enum.TryParse<TEnum>(value, ignoreCase: true, out var result))
-            throw new ArgumentException($"Value {argumentName} is invalid");
+            throw new ArgumentException($"Value {argumentName.Quoted()} is invalid");
         return result;
     }
 
@@ -98,5 +98,5 @@ internal static class ThrowHelper {
 
     [DoesNotReturn]
     internal static void ThrowArgumentEmptyException<T>(T value, string? argumentName = null) =>
-        throw new ArgumentException($"Value {argumentName} is not expected to be empty");
+        throw new ArgumentException($"Value {argumentName.Quoted()} is not expected to be empty");
 }

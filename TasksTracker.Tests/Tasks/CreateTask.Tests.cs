@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using TasksTracker.Api.Middleware;
 using TasksTracker.Tasks.CreatingTask;
 
 namespace TasksTracker.Tests.Tasks;
@@ -29,5 +31,11 @@ public sealed class CreateTaskTests : IClassFixture<TrackerWebApplicationFactory
         var request = new CreateTaskRequest(Name: name, State: state);
         var response = await _client.PostAsync("/api/tasks", request.ToStringContent());
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        var responseString = await response.Content.ReadAsStringAsync();
+        var errorDetails = await response.Content.ReadFromJsonAsync<ErrorDetails>();
+        errorDetails.Should().NotBeNull();
+        Debug.Assert(errorDetails != null);
+        errorDetails.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        
     }
 }
