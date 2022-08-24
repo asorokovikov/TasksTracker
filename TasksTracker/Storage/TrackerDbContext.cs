@@ -23,9 +23,11 @@ internal sealed class TrackerDbContextFactory : IDesignTimeDbContextFactory<Trac
         var builder = new DbContextOptionsBuilder<TrackerDbContext>();
         if (builder.IsConfigured)
             return new TrackerDbContext(builder.Options);
+        var environmentName = Environment.GetEnvironmentVariable("EnvironmentName") ?? "Development";
         var connectionString = new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory.AppendPath("../../../../TasksTracker.Api/bin/Debug/net6.0"))
             .AddJsonFile("appsettings.json")
+            .AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false)
             .AddEnvironmentVariables()
             .Build()
             .GetConnectionString("TrackerDatabase");
@@ -36,17 +38,17 @@ internal sealed class TrackerDbContextFactory : IDesignTimeDbContextFactory<Trac
 
 internal static class TrackerDbContextHelper {
     public static async ValueTask
-    OnAddAndSave<T>(this DbContext dataContext, T entity, CancellationToken ct) where T : notnull {
-        await dataContext.AddAsync(entity, ct);
-        await dataContext.SaveChangesAsync(ct);
+    OnAddAndSave<T>(this DbContext context, T entity, CancellationToken ct) where T : notnull {
+        await context.AddAsync(entity, ct);
+        await context.SaveChangesAsync(ct);
     }
 
     public static async ValueTask
-    OnRemoveAttachment(this TrackerDbContext dataContext, Guid id, CancellationToken ct) {
-        var attachment = await dataContext.Attachments.FirstOrDefaultAsync(x => x.Id == id, ct);
+    OnRemoveAttachment(this TrackerDbContext context, Guid id, CancellationToken ct) {
+        var attachment = await context.Attachments.FirstOrDefaultAsync(x => x.Id == id, ct);
         if (attachment == null)
             throw new KeyNotFoundException("Not found");
-        dataContext.Attachments.Remove(attachment);
-        await dataContext.SaveChangesAsync(ct);
+        context.Attachments.Remove(attachment);
+        await context.SaveChangesAsync(ct);
     }
 }

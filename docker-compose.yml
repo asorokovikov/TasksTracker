@@ -1,27 +1,20 @@
-version: "3.4"
-services:
-    trackerdb:
-        image: mcr.microsoft.com/mssql/server:2019-latest
-        container_name: trackerdb
-        environment:
-            MSSQL_SA_PASSWORD: "Password0!"
-            ACCEPT_EULA: "Y"
-        restart: always
-        ports:
-            - "1433:1433"
-        volumes:
-            - tracker-volume:/var/opt/mssql
+version: '3.4'
 
-    tracker.api:
-        container_name: tracker.api
-        image: tracker.api
-        ports:
-            - "8000:5000"
-        build:
-            context: .
-            dockerfile: TasksTracker.Api/Dockerfile
-        depends_on:
-            -   trackerdb
+services:
+  taskstracker.api:
+    image: ${DOCKER_REGISTRY-}taskstrackerapi
+    build:
+      context: .
+      dockerfile: TasksTracker.Api/Dockerfile
+  mssqlserver:
+    container_name: Microsoft.SqlServer
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+        MSSQL_SA_PASSWORD: "Password0!"
+        ACCEPT_EULA: "Y"
+    ports:
+        - "1433:1433"
+    volumes:
+        - tracker-volume:/var/opt/mssql
 volumes:
     tracker-volume:
-        name: tracker
